@@ -62,6 +62,6 @@ Unlike traditional advisors, SmartWealth combines **Symbolic AI (Rule-based Expe
 ---
 
 ## 🚀 Team Project
-**Project 12: Personalized AI-Based Investment Advisor** 
+**Personalized AI-Based Investment Advisor** 
 *Developed for the AI Final Submission.*
 
