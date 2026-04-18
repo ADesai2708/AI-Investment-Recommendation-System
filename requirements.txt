@@ -2,3 +2,6 @@ streamlit
 pyswip
 yfinance
 pandas
+plotly
+textblob
+

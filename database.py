@@ -1,28 +1,45 @@
 import sqlite3
+from datetime import datetime
 
-conn = sqlite3.connect("users.db", check_same_thread=False)
-cursor = conn.cursor()
+def get_connection():
+    return sqlite3.connect("investments.db", check_same_thread=False)
 
-# Create table
-cursor.execute("""
-CREATE TABLE IF NOT EXISTS users (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    age INTEGER,
-    income INTEGER,
-    risk TEXT,
-    strategy TEXT
-)
-""")
 
-conn.commit()
+def init_db():
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        age INTEGER,
+        income INTEGER,
+        goal TEXT,
+        risk TEXT,
+        strategy_title TEXT,
+        strategy_details TEXT,
+        timestamp DATETIME
+    )
+    """)
+    conn.commit()
+    conn.close()
 
-def save_user(age, income, risk, strategy):
+# Initialize on import
+init_db()
+
+def save_user(age, income, goal, risk, title, strategy):
+    conn = get_connection()
+    cursor = conn.cursor()
     cursor.execute(
-        "INSERT INTO users (age, income, risk, strategy) VALUES (?, ?, ?, ?)",
-        (age, income, risk, strategy)
+        "INSERT INTO users (age, income, goal, risk, strategy_title, strategy_details, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?)",
+        (age, income, goal, risk, title, strategy, datetime.now())
     )
     conn.commit()
+    conn.close()
 
 def get_users():
-    cursor.execute("SELECT * FROM users")
-    return cursor.fetchall()
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM users ORDER BY timestamp DESC")
+    rows = cursor.fetchall()
+    conn.close()
+    return rows
